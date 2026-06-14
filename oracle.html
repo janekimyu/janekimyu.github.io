@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>a line for you</title>
+<meta name="description" content="tap, and receive a line. a tiny oracle of Jane Kim Yu's own words.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#100d0b;--ink:#f3ece1;--soft:#b6aa98;--gold:#d9b27c;--serif:"Fraunces",Georgia,serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:radial-gradient(120% 90% at 50% -10%,#1b1612 0%,var(--bg) 55%) fixed;color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased;min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.6rem;padding:8vh 7vw;text-align:center;overflow:hidden;cursor:pointer;user-select:none}
+  /* drifting dust */
+  .dust{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .dust i{position:absolute;bottom:-10px;width:3px;height:3px;border-radius:50%;background:var(--gold);opacity:0;filter:blur(.3px);animation:float linear infinite}
+  @keyframes float{0%{transform:translateY(0) translateX(0);opacity:0}10%{opacity:.5}90%{opacity:.35}100%{transform:translateY(-104vh) translateX(22px);opacity:0}}
+  .stage{position:relative;z-index:2;max-width:680px}
+  .eyebrow{font-size:.74rem;letter-spacing:.36em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:2.4rem;opacity:.85}
+  .line{font-size:clamp(1.9rem,5.5vw,3.4rem);font-style:italic;font-weight:300;line-height:1.22;letter-spacing:-.01em;min-height:1.3em;transition:opacity .7s ease,transform .7s ease}
+  .line.out{opacity:0;transform:translateY(10px)}
+  .line .lit{color:var(--gold)}
+  .hint{position:fixed;bottom:7vh;left:0;right:0;z-index:2;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--soft);opacity:.55;transition:opacity .5s;animation:pulse 3s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.3}50%{opacity:.7}}
+  .sig{position:fixed;top:6vh;left:0;right:0;z-index:2;font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--soft);opacity:.45}
+  .sig a{color:inherit;text-decoration:none;border-bottom:1px solid rgba(217,178,124,.4);padding-bottom:2px}
+  /* gold flash on tap */
+  .flash{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(60% 50% at 50% 45%,rgba(217,178,124,.18),transparent 70%);opacity:0;transition:opacity .5s}
+  .flash.on{opacity:1}
+</style>
+</head>
+<body id="tap">
+  <div class="dust" id="dust"></div>
+  <div class="flash" id="flash"></div>
+  <div class="sig"><a href="index.html">a little room</a></div>
+  <div class="stage">
+    <div class="eyebrow">a line for you</div>
+    <div class="line" id="line">tap anywhere &nbsp;✦</div>
+  </div>
+  <div class="hint" id="hint">tap to receive · again for another</div>
+<script>
+  // Jane Kim Yu — verified lines (book-excerpts.md). The lit word(s) glow gold.
+  var lines=[
+    "it's not the mind that gets you there. it's the {heart}.",
+    "you are {love}, dearest. you are love.",
+    "to all those on the journey — you are {already home}.",
+    "{release} is peace.",
+    "love is the purest {meditation} there is.",
+    "we are all walking ourselves and each other {home}.",
+    "you are the {gift} you have been waiting for.",
+    "{sensitivity} is a strength.",
+    "emotions are our {guidance system}.",
+    "the truest miracle is when you {remember who you are}.",
+    "you are that which you {seek}, and there is none like you.",
+    "welcome {back home}.",
+    "you are not alone. we are {kindred}, you and i.",
+    "walk with love. walk in love. walk {as love}.",
+    "{dreams} seed the soil for a new reality.",
+    "it's always the {heart} that takes you all the way home.",
+    "the greatest gift we've been given is to {feel}.",
+    "to be {happy} for no reason is an excellent and valid reason.",
+    "you are of the light, my sweet. you are of the {brave}, my love.",
+    "your heart speaks in the {space between} your thoughts.",
+    "every blessed person you meet is an {angel}.",
+    "when we work on our healing, we {heal the world}.",
+    "the very door you have been searching for is {now}. it's in you. it is you.",
+    "faith is the {bridge} between dreams and reality."
+  ];
+  var last=-1, lineEl=document.getElementById('line'), hint=document.getElementById('hint'), flash=document.getElementById('flash'), first=true;
+  function render(s){return s.replace(/\{(.+?)\}/g,'<span class="lit">$1</span>');}
+  function give(){
+    var i; do{i=Math.floor(Math.random()*lines.length);}while(i===last&&lines.length>1); last=i;
+    lineEl.classList.add('out');
+    flash.classList.add('on'); setTimeout(function(){flash.classList.remove('on');},480);
+    setTimeout(function(){ lineEl.innerHTML=render(lines[i]); lineEl.classList.remove('out'); },380);
+    if(first){first=false; hint.textContent='again, for another';}
+  }
+  document.getElementById('tap').addEventListener('click',give);
+  document.addEventListener('keydown',function(e){if(e.code==='Space'||e.code==='Enter'){e.preventDefault();give();}});
+  // dust
+  var d=document.getElementById('dust');
+  for(var k=0;k<26;k++){var s=document.createElement('i');var dur=9+Math.random()*12;s.style.left=(Math.random()*100)+'vw';s.style.animationDuration=dur+'s';s.style.animationDelay=(-Math.random()*dur)+'s';var sc=.6+Math.random()*1.8;s.style.width=s.style.height=(sc*3)+'px';d.appendChild(s);}
+</script>
+</body>
+</html>

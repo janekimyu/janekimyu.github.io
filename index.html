@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>a little room</title>
+<meta name="description" content="a small room of useless, lovely things.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#100d0b; --ink:#f3ece1; --soft:#b6aa98; --gold:#d9b27c;
+    --serif:"Fraunces", Georgia, "Times New Roman", serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{height:100%}
+  body{
+    background:
+      radial-gradient(120% 90% at 50% -10%, #1b1612 0%, var(--bg) 55%) fixed;
+    color:var(--ink); font-family:var(--serif);
+    -webkit-font-smoothing:antialiased;
+    min-height:100%; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:3.2rem; padding:8vh 6vw;
+    text-align:center;
+  }
+  .crown{ opacity:0; animation:rise 1.4s .15s ease forwards }
+  .crown .eyebrow{ font-size:.78rem; letter-spacing:.34em; text-transform:uppercase; color:var(--gold); font-weight:500 }
+  .crown h1{ font-size:clamp(2.6rem,8vw,5rem); font-weight:300; font-style:italic; line-height:1.02; margin-top:.5rem; letter-spacing:-.01em }
+  .crown p{ color:var(--soft); margin-top:1.1rem; font-size:1.02rem; font-style:italic }
+
+  nav{ display:flex; flex-direction:column; gap:.2rem; width:min(440px,100%) }
+  a.door{
+    display:flex; align-items:baseline; gap:1.1rem;
+    text-decoration:none; color:var(--ink);
+    padding:1.05rem .4rem; border-top:1px solid rgba(255,255,255,.09);
+    transition:.45s cubic-bezier(.2,.7,.2,1); opacity:0; transform:translateY(8px);
+    animation:rise .9s ease forwards;
+  }
+  nav a.door:last-child{ border-bottom:1px solid rgba(255,255,255,.09) }
+  a.door:nth-child(1){animation-delay:.35s} a.door:nth-child(2){animation-delay:.45s}
+  a.door:nth-child(3){animation-delay:.55s} a.door:nth-child(4){animation-delay:.65s} a.door:nth-child(5){animation-delay:.75s}
+  a.door .n{ font-size:.8rem; color:var(--gold); letter-spacing:.1em; min-width:1.4rem; text-align:left }
+  a.door .name{ font-size:1.5rem; font-weight:300 }
+  a.door .what{ margin-left:auto; font-size:.82rem; color:var(--soft); font-style:italic; opacity:0; transition:.45s }
+  a.door:hover{ padding-left:1.1rem; color:var(--gold) }
+  a.door:hover .what{ opacity:1 }
+  @media (max-width:520px){ a.door .what{display:none} }
+
+  footer{ color:var(--soft); font-size:.8rem; font-style:italic; opacity:0; animation:rise 1.2s 1s ease forwards }
+  footer .heart{ color:var(--gold) }
+  @keyframes rise{ to{opacity:1; transform:none} }
+</style>
+</head>
+<body>
+  <div class="crown">
+    <div class="eyebrow">a little room</div>
+    <h1>come <em>in</em>.</h1>
+    <p>five small, useless, lovely things. stay as long as you like.</p>
+  </div>
+
+  <nav>
+    <a class="door" href="breathe.html"><span class="n">01</span><span class="name">breathe</span><span class="what">one slow breath, on a loop</span></a>
+    <a class="door" href="blessing.html"><span class="n">02</span><span class="name">a blessing</span><span class="what">press, and one arrives</span></a>
+    <a class="door" href="sky.html"><span class="n">03</span><span class="name">the night sky</span><span class="what">click to leave a star</span></a>
+    <a class="door" href="veranda.html"><span class="n">04</span><span class="name">the veranda</span><span class="what">a place, more than a page</span></a>
+    <a class="door" href="oracle.html"><span class="n">05</span><span class="name">a line for you</span><span class="what">tap, and one of my lines arrives</span></a>
+  </nav>
+
+  <footer>useless on purpose. made for no one. <span class="heart">&#9825;</span></footer>
+</body>
+</html>
