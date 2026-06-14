@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>the veranda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&display=swap" rel="stylesheet">
+<style>
+  :root{ --serif:"Fraunces",Georgia,serif }
+  *{margin:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{ font-family:var(--serif); color:#fbf3e6 }
+  /* sky cycles dawn -> day -> dusk -> night over ~80s */
+  .sky{ position:fixed; inset:0; animation:day 80s linear infinite; }
+  @keyframes day{
+    0%{ background:linear-gradient(180deg,#3a3550,#7d5b6a 45%,#e7a273 80%,#f6c98a) }   /* dawn */
+    25%{ background:linear-gradient(180deg,#7db4d8,#bfe0ee 60%,#fdf4dd) }               /* day */
+    50%{ background:linear-gradient(180deg,#caa6c0,#e79a76 55%,#f4c07a) }              /* dusk */
+    75%{ background:linear-gradient(180deg,#0e1430,#27284e 55%,#5b3f63) }              /* night */
+    100%{ background:linear-gradient(180deg,#3a3550,#7d5b6a 45%,#e7a273 80%,#f6c98a) }
+  }
+  .sun{ position:fixed; left:50%; width:120px; height:120px; border-radius:50%;
+    background:radial-gradient(circle,#fff7e0,#ffd98a 60%,rgba(255,217,138,0));
+    transform:translateX(-50%); animation:arc 80s linear infinite; filter:blur(2px) }
+  @keyframes arc{
+    0%{ top:78%; opacity:.9 } 25%{ top:14% } 50%{ top:60%; opacity:.9 }
+    60%{ opacity:0 } 90%{ opacity:0 } 100%{ top:78%; opacity:.9 }
+  }
+  .veil{ position:fixed; inset:0; background:radial-gradient(120% 80% at 50% 120%, rgba(20,12,8,.55), transparent 60%);
+    box-shadow:inset 0 -120px 160px rgba(20,12,8,.5) }
+  .vignette{ position:fixed; inset:0; pointer-events:none; box-shadow:inset 0 0 220px 70px rgba(20,12,8,.4) }
+  /* warm light motes (fireflies, mostly felt at dusk/night) */
+  .motes{ position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:3 }
+  .motes i{ position:absolute; bottom:18vh; width:5px; height:5px; border-radius:50%; background:#ffe6ab; box-shadow:0 0 8px 2px rgba(255,214,130,.7); opacity:0; animation:mote linear infinite }
+  @keyframes mote{ 0%{transform:translateY(0) translateX(0); opacity:0} 15%{opacity:.8} 50%{opacity:.5} 85%{opacity:.6} 100%{transform:translateY(-46vh) translateX(26px); opacity:0} }
+  /* the railing + table silhouette */
+  .scene{ position:fixed; left:0; right:0; bottom:0; height:42vh; z-index:4;
+    background:linear-gradient(180deg, rgba(28,18,12,.0), rgba(22,14,9,.92) 38%, #140c08);
+    display:flex; align-items:flex-end; justify-content:center }
+  .rail{ position:absolute; bottom:30vh; left:0; right:0; height:3px; background:rgba(22,14,9,.9) }
+  .rail::before,.rail::after{ content:""; position:absolute; bottom:0; width:3px; height:6.5vh; background:rgba(22,14,9,.9) }
+  .rail::before{ left:16% } .rail::after{ right:16% }
+  /* coffee cup */
+  .cup{ position:absolute; bottom:7vh; width:58px; height:42px; background:#170f0a; border-radius:0 0 26px 26px; box-shadow:0 0 0 3px #241812 }
+  .cup::after{ content:""; position:absolute; right:-16px; top:8px; width:18px; height:18px; border:3px solid #241812; border-radius:50% }
+  /* a small vase of flowers, beside the cup */
+  .vase{ position:absolute; bottom:7vh; left:calc(50% + 78px); width:26px; height:34px; background:#170f0a; border-radius:4px 4px 12px 12px; box-shadow:0 0 0 2px #241812 }
+  .vase .stem{ position:absolute; left:50%; bottom:30px; width:2px; height:26px; background:#241812; transform-origin:bottom }
+  .vase .stem.l{ transform:translateX(-50%) rotate(-18deg) } .vase .stem.r{ transform:translateX(-50%) rotate(16deg) } .vase .stem.m{ transform:translateX(-50%) }
+  .vase .bloom{ position:absolute; width:10px; height:10px; border-radius:50%; box-shadow:0 0 6px 1px rgba(255,180,170,.4) }
+  .vase .bloom.l{ left:calc(50% - 9px); bottom:52px; background:radial-gradient(circle,#ffd0c0,#e08a78) }
+  .vase .bloom.r{ left:calc(50% + 1px); bottom:50px; background:radial-gradient(circle,#ffe0b0,#e0a060) }
+  .vase .bloom.m{ left:calc(50% - 4px); bottom:58px; background:radial-gradient(circle,#ffd8e0,#d98aa0) }
+  /* steam */
+  .steam{ position:absolute; bottom:11vh; width:4px; height:50px; background:linear-gradient(180deg,rgba(255,245,225,.0),rgba(255,245,225,.5),rgba(255,245,225,0));
+    filter:blur(3px); border-radius:4px; opacity:.0; animation:steam 6s ease-in-out infinite }
+  .steam.b{ left:calc(50% - 8px); animation-delay:2s } .steam.c{ left:calc(50% + 8px); animation-delay:4s }
+  @keyframes steam{ 0%{opacity:0; transform:translateY(0) scaleX(1)} 30%{opacity:.6} 100%{opacity:0; transform:translateY(-40px) scaleX(1.8)} }
+  .words{ position:fixed; top:12vh; left:0; right:0; z-index:5; text-align:center; padding:0 8vw }
+  .words .l{ font-style:italic; font-weight:300; font-size:clamp(1.5rem,4.6vw,2.6rem); line-height:1.25; text-shadow:0 2px 30px rgba(0,0,0,.4) }
+  .words .s{ margin-top:.8rem; font-size:.85rem; letter-spacing:.28em; text-transform:uppercase; opacity:.75 }
+  .back{ position:fixed; top:1.4rem; left:1.6rem; color:#fbf3e6; text-decoration:none; font-style:italic; font-size:.92rem; opacity:.8; z-index:6; transition:.3s }
+  .back:hover{ opacity:1 }
+  .grain{ position:fixed; inset:0; z-index:6; pointer-events:none; opacity:.05; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") }
+  @media (prefers-reduced-motion: reduce){ .sky,.sun,.steam,.motes i{animation:none} .sky{background:linear-gradient(180deg,#caa6c0,#e79a76 55%,#f4c07a)} .sun{top:30%} }
+</style>
+</head>
+<body>
+  <div class="sky"></div>
+  <div class="sun"></div>
+  <div class="veil"></div>
+  <div class="vignette"></div>
+  <div class="motes" id="motes"></div>
+  <div class="words">
+    <div class="l">the real life part of coming alive.</div>
+    <div class="s">coffee on the veranda</div>
+  </div>
+  <div class="scene">
+    <div class="rail"></div>
+    <div class="cup"></div>
+    <div class="vase"><span class="stem l"></span><span class="stem m"></span><span class="stem r"></span><span class="bloom l"></span><span class="bloom m"></span><span class="bloom r"></span></div>
+    <div class="steam a" style="left:calc(50% - 1px)"></div>
+    <div class="steam b"></div>
+    <div class="steam c"></div>
+  </div>
+  <div class="grain"></div>
+  <a class="back" href="index.html">&larr; the room</a>
+<script>
+  var m=document.getElementById('motes');
+  for(var k=0;k<14;k++){var s=document.createElement('i');var dur=8+Math.random()*9;s.style.left=(10+Math.random()*80)+'vw';s.style.animationDuration=dur+'s';s.style.animationDelay=(-Math.random()*dur)+'s';var sc=.6+Math.random()*1.3;s.style.width=s.style.height=(sc*5)+'px';m.appendChild(s);}
+</script>
+</body>
+</html>

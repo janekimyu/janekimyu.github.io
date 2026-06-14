@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>breathe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&display=swap" rel="stylesheet">
+<style>
+  :root{ --bg:#0c0f10; --ink:#eef2f1; --soft:#8fa0a0; --glow:#e6c692; --serif:"Fraunces",Georgia,serif }
+  *{margin:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    background:radial-gradient(130% 100% at 50% 50%, #14191b 0%, var(--bg) 70%);
+    color:var(--ink); font-family:var(--serif);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    min-height:100%; overflow:hidden; cursor:default;
+  }
+  .dust{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+  .dust i{position:absolute;bottom:-10px;width:3px;height:3px;border-radius:50%;background:var(--glow);opacity:0;filter:blur(.4px);animation:float linear infinite}
+  @keyframes float{0%{transform:translateY(0) translateX(0);opacity:0}12%{opacity:.45}88%{opacity:.3}100%{transform:translateY(-104vh) translateX(20px);opacity:0}}
+  .vignette{position:fixed;inset:0;z-index:2;pointer-events:none;box-shadow:inset 0 0 200px 70px rgba(0,0,0,.45)}
+  .grain{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.045;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .stage{ position:relative; z-index:4; width:min(70vmin,360px); height:min(70vmin,360px); display:grid; place-items:center }
+  .aura{ position:absolute; width:74%; height:74%; border-radius:50%; background:radial-gradient(circle,rgba(230,198,146,.22),transparent 68%); filter:blur(18px); animation:breathe 16s ease-in-out infinite }
+  .orb{
+    width:46%; height:46%; border-radius:50%;
+    background:radial-gradient(circle at 38% 34%, #fff7e8, var(--glow) 45%, #b78a4d 100%);
+    box-shadow:0 0 60px 14px rgba(230,198,146,.35), 0 0 140px 40px rgba(230,198,146,.12);
+    animation:breathe 16s ease-in-out infinite;
+  }
+  .ring{ position:absolute; inset:0; border-radius:50%; border:1px solid rgba(230,198,146,.22); animation:breathe 16s ease-in-out infinite }
+  .ring.two{ inset:11%; border-color:rgba(230,198,146,.14); animation-delay:.4s }
+  .word{
+    position:absolute; bottom:-3.4rem; width:100%; text-align:center;
+    font-style:italic; font-size:1.25rem; color:var(--ink); letter-spacing:.02em;
+  }
+  .word span{ opacity:0; animation:cue 16s ease-in-out infinite }
+  .s2{animation-delay:4s}.s3{animation-delay:7s}.s4{animation-delay:11s}
+  .word span{position:absolute; left:0; right:0}
+  @keyframes breathe{
+    0%{transform:scale(.72)} 25%{transform:scale(1.18)}
+    44%{transform:scale(1.18)} 69%{transform:scale(.72)} 100%{transform:scale(.72)}
+  }
+  @keyframes cue{ 0%,100%{opacity:0} 6%,18%{opacity:.95} 24%{opacity:0} }
+  .s1{animation-name:cueIn} @keyframes cueIn{0%{opacity:0}3%{opacity:.95}22%{opacity:.95}26%{opacity:0}100%{opacity:0}}
+  .s2{animation-name:cueHold}@keyframes cueHold{0%,26%{opacity:0}29%{opacity:.95}42%{opacity:.95}46%{opacity:0}100%{opacity:0}}
+  .s3{animation-name:cueOut}@keyframes cueOut{0%,46%{opacity:0}49%{opacity:.95}66%{opacity:.95}70%{opacity:0}100%{opacity:0}}
+  .s4{animation-name:cueRest}@keyframes cueRest{0%,70%{opacity:0}73%{opacity:.9}96%{opacity:.9}100%{opacity:0}}
+  .back{ position:fixed; top:1.4rem; left:1.6rem; z-index:5; color:var(--soft); text-decoration:none; font-style:italic; font-size:.92rem; transition:.3s }
+  .back:hover{ color:var(--glow) }
+  @media (prefers-reduced-motion: reduce){ .orb,.ring,.aura,.word span,.dust i{animation-duration:0.001s; animation-iteration-count:1} .orb{transform:scale(1)} }
+</style>
+</head>
+<body>
+  <div class="dust" id="dust"></div>
+  <div class="vignette"></div>
+  <div class="grain"></div>
+  <a class="back" href="index.html">&larr; the room</a>
+  <div class="stage">
+    <div class="aura"></div>
+    <div class="ring"></div>
+    <div class="ring two"></div>
+    <div class="orb"></div>
+    <div class="word">
+      <span class="s1">breathe in&hellip;</span>
+      <span class="s2">hold&hellip;</span>
+      <span class="s3">let go&hellip;</span>
+      <span class="s4">rest.</span>
+    </div>
+  </div>
+<script>
+  var d=document.getElementById('dust');
+  for(var k=0;k<22;k++){var s=document.createElement('i');var dur=11+Math.random()*13;s.style.left=(Math.random()*100)+'vw';s.style.animationDuration=dur+'s';s.style.animationDelay=(-Math.random()*dur)+'s';var sc=.6+Math.random()*1.6;s.style.width=s.style.height=(sc*3)+'px';d.appendChild(s);}
+</script>
+</body>
+</html>

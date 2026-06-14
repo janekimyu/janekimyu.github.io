@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>the night sky</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..400;1,9..144,300..400&display=swap" rel="stylesheet">
+<style>
+  :root{ --soft:#7d8aa6; --gold:#e6c692; --serif:"Fraunces",Georgia,serif }
+  *{margin:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{ background:radial-gradient(140% 120% at 50% 8%, #14182a 0%, #0a0c16 55%, #07080f 100%); font-family:var(--serif) }
+  /* faint milky band */
+  .neb{ position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.5;
+    background:radial-gradient(60% 38% at 32% 30%, rgba(120,110,180,.16), transparent 60%),
+               radial-gradient(50% 40% at 72% 64%, rgba(90,130,170,.13), transparent 62%) }
+  canvas{ display:block; position:fixed; inset:0; z-index:1; cursor:crosshair }
+  .grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .hud{ position:fixed; bottom:1.6rem; left:0; right:0; z-index:3; text-align:center; color:var(--soft); font-style:italic; font-size:.92rem; pointer-events:none; transition:opacity 1.2s; letter-spacing:.03em }
+  .back{ position:fixed; top:1.4rem; left:1.6rem; color:var(--soft); text-decoration:none; font-style:italic; font-size:.92rem; z-index:4; transition:.3s }
+  .back:hover{ color:var(--gold) }
+</style>
+</head>
+<body>
+  <div class="neb"></div>
+  <a class="back" href="index.html">&larr; the room</a>
+  <canvas id="c"></canvas>
+  <div class="grain"></div>
+  <div class="hud" id="hud">click anywhere &mdash; leave a star</div>
+<script>
+  const cv = document.getElementById('c'), ctx = cv.getContext('2d'), hud = document.getElementById('hud');
+  let W,H,DPR;
+  function size(){ DPR=Math.min(devicePixelRatio||1,2); W=cv.width=innerWidth*DPR; H=cv.height=innerHeight*DPR; cv.style.width=innerWidth+'px'; cv.style.height=innerHeight+'px'; if(stars.length<bg) seed(); }
+  const stars=[]; const bg=140;
+  function star(x,y,r,base){ return {x,y,r,base,ph:Math.random()*6.28,sp:.6+Math.random()*1.2}; }
+  function seed(){ for(let i=0;i<bg;i++){ stars.push(star(Math.random()*W,Math.random()*H, (Math.random()*1.1+.3)*DPR, .25+Math.random()*.4)); } }
+  // shooting stars
+  const shoots=[]; let nextShoot=2+Math.random()*5;
+  function spawnShoot(){ const sx=Math.random()*W*.7, sy=Math.random()*H*.4; const ang=Math.PI*(0.18+Math.random()*0.12); const sp=(7+Math.random()*5)*DPR; shoots.push({x:sx,y:sy,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,life:0,max:.9+Math.random()*.5}); }
+  let t=0, lt=0;
+  function frame(ts){
+    const now=ts? ts/1000 : t+.016; const dt=Math.min(.05, now-lt||.016); lt=now; t+=.016;
+    ctx.clearRect(0,0,W,H);
+    for(const s of stars){
+      const tw = s.base + Math.sin(t*s.sp + s.ph)*.35*s.base + (s.born? Math.max(0,1-(t-s.born))*0.6:0);
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,6.2832);
+      ctx.fillStyle = `rgba(${s.warm?'247,231,200':'225,231,247'},${Math.max(0,Math.min(1,tw))})`;
+      ctx.shadowBlur = s.r*4; ctx.shadowColor = s.warm? 'rgba(230,198,146,.7)':'rgba(180,200,255,.5)';
+      ctx.fill();
+    }
+    ctx.shadowBlur=0;
+    // shooting stars
+    nextShoot-=dt; if(nextShoot<=0){ spawnShoot(); nextShoot=4+Math.random()*7; }
+    for(let i=shoots.length-1;i>=0;i--){ const sh=shoots[i]; sh.life+=dt; const a=Math.max(0,1-sh.life/sh.max);
+      const px=sh.x, py=sh.y; sh.x+=sh.vx; sh.y+=sh.vy;
+      const g=ctx.createLinearGradient(px-sh.vx*6,py-sh.vy*6,px,py);
+      g.addColorStop(0,'rgba(247,231,200,0)'); g.addColorStop(1,`rgba(247,231,200,${a*.9})`);
+      ctx.strokeStyle=g; ctx.lineWidth=1.6*DPR; ctx.beginPath(); ctx.moveTo(px-sh.vx*6,py-sh.vy*6); ctx.lineTo(px,py); ctx.stroke();
+      if(sh.life>=sh.max||sh.x>W||sh.y>H) shoots.splice(i,1);
+    }
+    requestAnimationFrame(frame);
+  }
+  function add(x,y){
+    const s = star(x*DPR,y*DPR,(Math.random()*1.6+1.4)*DPR,.9); s.warm=true; s.born=t; stars.push(s);
+    if(stars.length===bg+1){ hud.style.opacity=0; }
+  }
+  addEventListener('resize',size);
+  cv.addEventListener('click',e=>add(e.clientX,e.clientY));
+  cv.addEventListener('touchstart',e=>{ for(const tch of e.changedTouches) add(tch.clientX,tch.clientY); },{passive:true});
+  size(); requestAnimationFrame(frame);
+</script>
+</body>
+</html>

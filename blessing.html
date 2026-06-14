@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>a blessing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..500&display=swap" rel="stylesheet">
+<style>
+  :root{ --bg:#100d0b; --ink:#f3ece1; --soft:#b6aa98; --gold:#d9b27c; --serif:"Fraunces",Georgia,serif }
+  *{margin:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    background:radial-gradient(120% 90% at 50% 0%, #1b1612 0%, var(--bg) 60%);
+    color:var(--ink); font-family:var(--serif); min-height:100%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:8vh 7vw; text-align:center; user-select:none; overflow:hidden; position:relative;
+  }
+  .glow{position:fixed;top:38%;left:50%;width:60vw;height:60vw;max-width:560px;max-height:560px;transform:translate(-50%,-50%);z-index:0;pointer-events:none;background:radial-gradient(circle,rgba(217,178,124,.16),transparent 66%);filter:blur(20px);opacity:0;transition:opacity 1s}
+  .glow.on{opacity:1}
+  .dust{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+  .dust i{position:absolute;bottom:-10px;width:3px;height:3px;border-radius:50%;background:var(--gold);opacity:0;filter:blur(.4px);animation:float linear infinite}
+  @keyframes float{0%{transform:translateY(0);opacity:0}12%{opacity:.4}88%{opacity:.28}100%{transform:translateY(-104vh) translateX(18px);opacity:0}}
+  .vignette{position:fixed;inset:0;z-index:2;pointer-events:none;box-shadow:inset 0 0 200px 70px rgba(0,0,0,.4)}
+  .grain{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.045;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .line{
+    position:relative; z-index:4;
+    font-size:clamp(1.8rem,6vw,3.4rem); font-weight:300; font-style:italic; line-height:1.18;
+    max-width:18ch; min-height:3.4em; display:flex; align-items:center; justify-content:center;
+    transition:opacity .6s ease, transform .6s ease; opacity:0; transform:translateY(10px);
+  }
+  .line.show{ opacity:1; transform:none }
+  button{
+    position:relative; z-index:4;
+    margin-top:3rem; font-family:var(--serif); font-style:italic; font-size:1rem;
+    color:var(--bg); background:var(--gold); border:none; border-radius:999px;
+    padding:.85rem 2.1rem; cursor:pointer; letter-spacing:.02em;
+    box-shadow:0 8px 30px rgba(217,178,124,.25); transition:.3s;
+  }
+  button:hover{ transform:translateY(-2px); box-shadow:0 12px 38px rgba(217,178,124,.42) }
+  button:active{ transform:translateY(0) }
+  .hint{ position:relative; z-index:4; margin-top:1.1rem; color:var(--soft); font-size:.8rem; font-style:italic; letter-spacing:.04em }
+  .back{ position:fixed; top:1.4rem; left:1.6rem; z-index:5; color:var(--soft); text-decoration:none; font-style:italic; font-size:.92rem; transition:.3s }
+  .back:hover{ color:var(--gold) }
+</style>
+</head>
+<body>
+  <div class="glow" id="glow"></div>
+  <div class="dust" id="dust"></div>
+  <div class="vignette"></div>
+  <div class="grain"></div>
+  <a class="back" href="index.html">&larr; the room</a>
+  <div class="line" id="line">press, and one arrives.</div>
+  <button id="btn">a blessing &#9826;</button>
+  <div class="hint" id="hint">&nbsp;</div>
+
+<script>
+  // her own lines — add, cut, or change freely. this is the whole toy.
+  const blessings = [
+    "you are love.",
+    "come home. you are already home.",
+    "the heart leads. always.",
+    "feel it, then let it go.",
+    "you are not alone in this.",
+    "presence, lived.",
+    "the soul likes to play — a lot.",
+    "you are exactly where you are meant to be.",
+    "trust the timing of your life.",
+    "anything true always energizes or calms — or both.",
+    "a river must flow. you will grow. it is so.",
+    "what you give, you always receive — a thousandfold.",
+    "the inward journey home is the outward journey out.",
+    "love is your one true name.",
+    "every tear paves the way.",
+    "be in this world, but not of it.",
+    "you are a living, breathing art.",
+    "follow the breadcrumb.",
+    "keep the faith. just hold on.",
+    "the diamond of your soul is already yours.",
+    "hm.",
+    "still here. still becoming."
+  ];
+
+  const lineEl = document.getElementById('line');
+  const btn = document.getElementById('btn');
+  const hint = document.getElementById('hint');
+  const glow = document.getElementById('glow');
+  let last = -1, pressed = false;
+
+  function draw(){
+    let i; do { i = Math.floor(Math.random()*blessings.length); } while (i === last && blessings.length>1);
+    last = i;
+    lineEl.classList.remove('show');
+    glow.classList.add('on');
+    setTimeout(()=>{ lineEl.textContent = blessings[i]; lineEl.classList.add('show'); }, 220);
+    if(!pressed){ pressed = true; btn.textContent = "again ✦"; }
+    hint.textContent = "screenshot it. keep it. pass it on.";
+  }
+  requestAnimationFrame(()=>{ lineEl.classList.add('show'); glow.classList.add('on'); });
+  btn.addEventListener('click', draw);
+  document.addEventListener('keydown', e=>{ if(e.code==='Space'||e.code==='Enter'){ e.preventDefault(); draw(); }});
+  // dust
+  var d=document.getElementById('dust');
+  for(var k=0;k<20;k++){var s=document.createElement('i');var dur=11+Math.random()*12;s.style.left=(Math.random()*100)+'vw';s.style.animationDuration=dur+'s';s.style.animationDelay=(-Math.random()*dur)+'s';var sc=.6+Math.random()*1.5;s.style.width=s.style.height=(sc*3)+'px';d.appendChild(s);}
+</script>
+</body>
+</html>
