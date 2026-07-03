@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>JANE.EXE v3</title>
-<meta name="description" content="The third interactive CRT terminal version of Jane's personal homepage.">
+<title>JANE.EXE v2</title>
+<meta name="description" content="The second interactive CRT terminal version of Jane's personal homepage.">
 <link rel="icon" href="data:,">
 <style>
   :root{
@@ -29,16 +29,6 @@
       linear-gradient(rgba(121,255,159,.035) 50%, rgba(0,0,0,.2) 50%) 0 0/100% 4px,
       radial-gradient(circle at 50% 15%, #102417 0, #040806 58%, #000 100%);
     overflow-x:hidden;
-  }
-  body.theme-amber{
-    --green:#ffc766;
-    --green2:#ffe4a3;
-    --amber:#79ff9f;
-    --muted:#c69f5f;
-    --danger:#ff8fa8;
-  }
-  body.glitching{
-    animation:glitchFrame .12s steps(2,end) 7;
   }
   body::before{
     content:"";
@@ -88,12 +78,6 @@
     text-transform:uppercase;
     text-decoration:none;
     border-bottom:1px dashed rgba(125,169,139,.65);
-  }
-  .history-group{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    flex-wrap:wrap;
   }
   .history:hover,.history:focus-visible{
     color:var(--amber);
@@ -216,10 +200,6 @@
   .terminal-line.error{
     color:var(--danger);
   }
-  .terminal-line.file{
-    color:#f5ffe9;
-    padding-left:2ch;
-  }
   .terminal-form{
     display:flex;
     gap:10px;
@@ -337,12 +317,6 @@
     font-size:.86rem;
   }
   @keyframes blink{50%{opacity:0}}
-  @keyframes glitchFrame{
-    0%{filter:hue-rotate(0deg);transform:translate(0,0)}
-    35%{filter:hue-rotate(35deg) contrast(1.3);transform:translate(2px,-1px)}
-    70%{filter:hue-rotate(-25deg) contrast(1.15);transform:translate(-2px,1px)}
-    100%{filter:none;transform:translate(0,0)}
-  }
   @media (max-width:780px){
     .grid{grid-template-columns:1fr}
     .sidebox{position:static}
@@ -362,25 +336,21 @@
   <main class="shell">
     <div class="top-actions">
       <a class="home" href="index.html" aria-label="Return to homepage">&lt; home</a>
-      <span class="history-group">
-        <a class="history" href="jane-exe-v2.html">view v2</a>
-        <a class="history" href="jane-exe-v1.html">view v1</a>
-      </span>
+      <a class="history" href="jane-exe-v1.html">view v1</a>
     </div>
 
     <header>
       <div class="meta">
         <span>JANE PERSONAL OPERATING ENVIRONMENT</span>
-        <span id="statusText">status: joyfully unstable</span>
+        <span id="statusText">status: suspiciously awake</span>
       </div>
       <h1>JANE.EXE</h1>
-      <p class="tagline">A terminal-shaped homepage for web experiments, AI curiosities, and the part of coding that feels like making a tiny door in a wall. Now with secret files and suspiciously emotional commands.</p>
+      <p class="tagline">A terminal-shaped homepage for web experiments, AI curiosities, and the part of coding that feels like making a tiny door in a wall. Now with commands you can poke.</p>
       <div class="boot" id="boot" aria-label="boot log">
         <p>&gt; locating curiosity.sys</p>
         <p>&gt; loading websites, half-ideas, useful nonsense</p>
         <p>&gt; calibrating AI tools for human-scale weirdness</p>
-        <p>&gt; mounting tiny filesystem</p>
-        <p>&gt; installing mischief driver v3</p>
+        <p>&gt; installing mischief driver</p>
         <p class="cursor">&gt; ready</p>
       </div>
     </header>
@@ -393,20 +363,17 @@
       <button type="button" data-command="projects">PROJECTS</button>
       <button type="button" data-command="fortune">FORTUNE</button>
       <button type="button" data-command="vibe">VIBE</button>
-      <button type="button" data-command="ls">LS</button>
-      <button type="button" data-command="oracle">ORACLE</button>
-      <button type="button" data-command="glitch">GLITCH</button>
       <button type="button" data-command="sudo">SUDO</button>
     </nav>
 
     <section class="terminal-app" aria-label="interactive JANE.EXE terminal">
       <div class="terminal-head">
         <span>interactive shell</span>
-        <span>try: help, ls, cat feelings.tmp, amber, glitch</span>
+        <span>try: help, fortune, vibe, sudo, clear</span>
       </div>
       <div class="terminal-output" id="terminalOutput" aria-live="polite">
-        <p class="terminal-line system">JANE.EXE v3 loaded. Type <strong>help</strong> or press a command.</p>
-        <p class="terminal-line">homepage personality checksum: 97% handmade, 2% dramatic cursor, 1% unauthorized feelings</p>
+        <p class="terminal-line system">JANE.EXE v2 loaded. Type <strong>help</strong> or press a command.</p>
+        <p class="terminal-line">homepage personality checksum: 98% handmade, 2% dramatic cursor</p>
       </div>
       <form class="terminal-form" id="terminalForm">
         <label for="commandInput">jane@home:~$</label>
@@ -490,47 +457,12 @@
       'your next good idea is hiding inside a ridiculous first draft.',
       'the machine says: drink water, ship weird, stay tender.'
     ];
-    var oracles = [
-      'you do not need a bigger internet. you need a truer one.',
-      'the small thing is not small if it opens a door.',
-      'your taste is a compass disguised as an inconvenience.',
-      'make the page that would make past-you grin.',
-      'a handmade website is a note slipped under the future.'
-    ];
     var vibes = [
       'vibe scan: 72% terminal garden, 18% haunted stationery, 10% useful button.',
       'vibe scan: handmade signal detected. corporate template not found.',
       'vibe scan: small internet magic accumulating in the corners.',
       'vibe scan: creative voltage stable. mystery levels pleasingly high.'
     ];
-    var files = {
-      'about.txt': [
-        'Jane builds small, odd, useful-ish things on the internet.',
-        'Current location: somewhere between code, AI, websites, and a tiny door in a wall.'
-      ],
-      'web.log': [
-        'web.log opened',
-        'entry 01: websites are still magic.',
-        'entry 02: static files can be a whole little world.',
-        'entry 03: no template was harmed in the making of this page.'
-      ],
-      'ai.ini': [
-        '[ai]',
-        'mode=collaborator',
-        'confidence=occasionally suspicious',
-        'goal=make the human more human'
-      ],
-      'feelings.tmp': [
-        'temporary file contents:',
-        'permission denied: pretending not to care',
-        'permission granted: caring, visibly'
-      ],
-      'door.exe': [
-        'door.exe launched',
-        'a small green door appears in the terminal.',
-        'it opens inward. obviously.'
-      ]
-    };
     var sectionCommands = {
       about: 'Opening ABOUT. Jane appears to be building small, odd, useful-ish things again.',
       web: 'Opening WEB. Warning: websites remain magic despite repeated attempts to make them normal.',
@@ -578,9 +510,7 @@
         addBlock([
           'available commands:',
           '  about, web, ai, projects, contact',
-          '  fortune, vibe, oracle, sudo, scan, readme, clear',
-          '  ls, cat about.txt, cat feelings.tmp, amber, green, glitch',
-          '  whoami, love, coffee, panic, reboot, make website',
+          '  fortune, vibe, sudo, scan, readme, clear',
           'pro tip: the fake terminal is real enough if you believe in buttons.'
         ], 'system');
         return;
@@ -588,12 +518,6 @@
 
       if (command === 'fortune') {
         addLine(randomFrom(fortunes), 'system');
-        return;
-      }
-
-      if (command === 'oracle') {
-        addLine('oracle says: ' + randomFrom(oracles), 'system');
-        if (statusText) statusText.textContent = 'status: oracle consulted';
         return;
       }
 
@@ -606,86 +530,6 @@
       if (command === 'sudo') {
         addLine('permission denied: you are already powerful enough', 'error');
         if (statusText) statusText.textContent = 'status: authority questioned';
-        return;
-      }
-
-      if (command === 'whoami') {
-        addLine('user identified: person making the internet stranger in a good way', 'system');
-        return;
-      }
-
-      if (command === 'love') {
-        addLine('love.exe is already running in the background', 'system');
-        return;
-      }
-
-      if (command === 'coffee') {
-        addLine('coffee subsystem warming. veranda protocol remembered.', 'system');
-        return;
-      }
-
-      if (command === 'panic') {
-        addLine('panic cancelled. opening tiny breathing room instead.', 'system');
-        addLine('inhale for 4. hold for 2. exhale like the website can wait.', 'file');
-        return;
-      }
-
-      if (command === 'reboot') {
-        addLine('soft reboot requested. keeping all tenderness in memory.', 'system');
-        if (statusText) statusText.textContent = 'status: rebooted but still weird';
-        return;
-      }
-
-      if (command === 'make website') {
-        addLine('creating website...', 'system');
-        addLine('step 1: have a feeling', 'file');
-        addLine('step 2: give it a div', 'file');
-        addLine('step 3: refuse to sand off the interesting part', 'file');
-        return;
-      }
-
-      if (command === 'ls') {
-        addBlock([
-          'about.txt',
-          'web.log',
-          'ai.ini',
-          'feelings.tmp',
-          'door.exe'
-        ], 'file');
-        return;
-      }
-
-      if (command.indexOf('cat ') === 0 || command.indexOf('open ') === 0) {
-        var fileName = command.replace(/^(cat|open)\s+/, '');
-        if (files[fileName]) {
-          addBlock(files[fileName], 'file');
-        } else {
-          addLine('file not found: ' + fileName + '. try ls.', 'error');
-        }
-        return;
-      }
-
-      if (command === 'amber' || command === 'theme amber') {
-        document.body.classList.add('theme-amber');
-        addLine('theme switched: amber phosphor. the computer feels warmer now.', 'system');
-        if (statusText) statusText.textContent = 'status: amber and dramatic';
-        return;
-      }
-
-      if (command === 'green' || command === 'theme green') {
-        document.body.classList.remove('theme-amber');
-        addLine('theme switched: green phosphor. classic mystery restored.', 'system');
-        if (statusText) statusText.textContent = 'status: joyfully unstable';
-        return;
-      }
-
-      if (command === 'glitch') {
-        document.body.classList.remove('glitching');
-        void document.body.offsetWidth;
-        document.body.classList.add('glitching');
-        window.setTimeout(function(){ document.body.classList.remove('glitching'); }, 900);
-        addLine('visual stability restored. emotional stability pending.', 'system');
-        if (statusText) statusText.textContent = 'status: briefly pixel-haunted';
         return;
       }
 
