@@ -168,10 +168,18 @@
     letter-spacing:.14em;
   }
   .mode h2{
-    margin:18px 0 12px;
+    margin:18px 0 8px;
     font-size:clamp(1.35rem,2.5vw,2rem);
     line-height:1;
     letter-spacing:0;
+  }
+  .mode .version{
+    display:block;
+    margin:0 0 12px;
+    color:var(--muted);
+    font-size:.72rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
   }
   .mode p{
     margin:0;
@@ -247,6 +255,7 @@
           <span class="number">MODE 01</span>
           <span>
             <h2>JANE.EXE</h2>
+            <span class="version">latest build: v4</span>
             <p>A glowing terminal with secret files, fake commands, web, AI, projects, and contact.</p>
           </span>
           <span class="launch">run jane.exe</span>
