@@ -64,6 +64,26 @@
     outline-offset:3px;
     background:rgba(255,211,107,.16);
   }
+  .top-actions{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .history{
+    color:var(--muted);
+    font-size:.78rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    text-decoration:none;
+    border-bottom:1px dashed rgba(125,169,139,.65);
+  }
+  .history:hover,.history:focus-visible{
+    color:var(--amber);
+    outline:2px solid var(--amber);
+    outline-offset:4px;
+  }
   header{
     margin:clamp(34px,7vw,72px) 0 28px;
     border:1px solid rgba(121,255,159,.45);
@@ -120,23 +140,105 @@
     display:flex;
     flex-wrap:wrap;
     gap:10px;
-    margin:24px 0 34px;
+    margin:24px 0 18px;
   }
-  .commands a{
+  .commands button{
     color:var(--bg);
     background:var(--green);
     border:2px solid var(--green);
-    text-decoration:none;
     font-weight:700;
     letter-spacing:.08em;
     padding:10px 12px;
     box-shadow:0 0 18px rgba(121,255,159,.22);
+    cursor:pointer;
+    font-family:var(--mono);
   }
-  .commands a:hover,.commands a:focus-visible{
+  .commands button:hover,.commands button:focus-visible{
     outline:2px solid var(--amber);
     outline-offset:3px;
     background:var(--amber);
     border-color:var(--amber);
+  }
+  .terminal-app{
+    border:1px solid rgba(121,255,159,.5);
+    background:rgba(1,5,3,.84);
+    box-shadow:0 0 42px rgba(121,255,159,.14), inset 0 0 34px rgba(121,255,159,.05);
+    margin:0 0 34px;
+    padding:clamp(14px,3vw,22px);
+  }
+  .terminal-head{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+    color:var(--muted);
+    border-bottom:1px dashed rgba(121,255,159,.28);
+    padding-bottom:12px;
+    margin-bottom:14px;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    font-size:.78rem;
+  }
+  .terminal-output{
+    min-height:13rem;
+    max-height:22rem;
+    overflow:auto;
+    padding-right:6px;
+    line-height:1.5;
+  }
+  .terminal-line{
+    margin:0 0 8px;
+    color:#d7ffe1;
+    overflow-wrap:anywhere;
+  }
+  .terminal-line.command{
+    color:var(--green);
+  }
+  .terminal-line.system{
+    color:var(--amber);
+  }
+  .terminal-line.error{
+    color:var(--danger);
+  }
+  .terminal-form{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    border-top:1px dashed rgba(121,255,159,.28);
+    margin-top:14px;
+    padding-top:14px;
+  }
+  .terminal-form label{
+    color:var(--green);
+    white-space:nowrap;
+  }
+  .terminal-form input{
+    min-width:0;
+    flex:1;
+    color:var(--green2);
+    background:transparent;
+    border:0;
+    border-bottom:1px solid rgba(121,255,159,.55);
+    border-radius:0;
+    padding:8px 4px;
+    font:inherit;
+  }
+  .terminal-form input:focus{
+    outline:2px solid var(--amber);
+    outline-offset:4px;
+  }
+  .terminal-form button{
+    color:var(--bg);
+    background:var(--amber);
+    border:2px solid var(--amber);
+    padding:8px 12px;
+    font:inherit;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .terminal-form button:hover,.terminal-form button:focus-visible{
+    outline:2px solid var(--green);
+    outline-offset:3px;
   }
   .grid{
     display:grid;
@@ -218,8 +320,11 @@
   @media (max-width:780px){
     .grid{grid-template-columns:1fr}
     .sidebox{position:static}
-    .commands a{flex:1 1 140px;text-align:center}
+    .commands button{flex:1 1 140px;text-align:center}
     header{margin-top:28px}
+    .terminal-form{align-items:stretch;flex-wrap:wrap}
+    .terminal-form label{width:100%}
+    .terminal-form button{width:100%}
   }
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation:none !important;transition:none !important;scroll-behavior:auto !important}
@@ -229,31 +334,53 @@
 </head>
 <body>
   <main class="shell">
-    <a class="home" href="index.html" aria-label="Return to homepage">&lt; home</a>
+    <div class="top-actions">
+      <a class="home" href="index.html" aria-label="Return to homepage">&lt; home</a>
+      <a class="history" href="jane-exe-v1.html">view v1</a>
+    </div>
 
     <header>
       <div class="meta">
         <span>JANE PERSONAL OPERATING ENVIRONMENT</span>
-        <span>status: handmade</span>
+        <span id="statusText">status: suspiciously awake</span>
       </div>
       <h1>JANE.EXE</h1>
-      <p class="tagline">A terminal-shaped homepage for web experiments, AI curiosities, and the part of coding that feels like making a tiny door in a wall.</p>
+      <p class="tagline">A terminal-shaped homepage for web experiments, AI curiosities, and the part of coding that feels like making a tiny door in a wall. Now with commands you can poke.</p>
       <div class="boot" id="boot" aria-label="boot log">
         <p>&gt; locating curiosity.sys</p>
         <p>&gt; loading websites, half-ideas, useful nonsense</p>
         <p>&gt; calibrating AI tools for human-scale weirdness</p>
-        <p>&gt; opening homepage interface</p>
+        <p>&gt; installing mischief driver</p>
         <p class="cursor">&gt; ready</p>
       </div>
     </header>
 
     <nav class="commands" aria-label="terminal commands">
-      <a href="#about">ABOUT</a>
-      <a href="#web">WEB</a>
-      <a href="#ai">AI</a>
-      <a href="#projects">PROJECTS</a>
-      <a href="#contact">CONTACT</a>
+      <button type="button" data-command="help">HELP</button>
+      <button type="button" data-command="about">ABOUT</button>
+      <button type="button" data-command="web">WEB</button>
+      <button type="button" data-command="ai">AI</button>
+      <button type="button" data-command="projects">PROJECTS</button>
+      <button type="button" data-command="fortune">FORTUNE</button>
+      <button type="button" data-command="vibe">VIBE</button>
+      <button type="button" data-command="sudo">SUDO</button>
     </nav>
+
+    <section class="terminal-app" aria-label="interactive JANE.EXE terminal">
+      <div class="terminal-head">
+        <span>interactive shell</span>
+        <span>try: help, fortune, vibe, sudo, clear</span>
+      </div>
+      <div class="terminal-output" id="terminalOutput" aria-live="polite">
+        <p class="terminal-line system">JANE.EXE v2 loaded. Type <strong>help</strong> or press a command.</p>
+        <p class="terminal-line">homepage personality checksum: 98% handmade, 2% dramatic cursor</p>
+      </div>
+      <form class="terminal-form" id="terminalForm">
+        <label for="commandInput">jane@home:~$</label>
+        <input id="commandInput" name="command" autocomplete="off" spellcheck="false" placeholder="type a command">
+        <button type="submit">run</button>
+      </form>
+    </section>
 
     <div class="grid">
       <div class="stack">
@@ -271,7 +398,7 @@
 
         <section id="ai" tabindex="-1">
           <h2>AI</h2>
-          <p><span class="prompt">&gt;</span> I am curious about AI as a collaborator, a sketchbook, a debugging duck, and sometimes an extremely confident autocomplete machine.</p>
+          <p><span class="prompt">&gt;</span> I am curious about AI as a collaborator, a sketchbook, a thinking mirror, and sometimes an extremely confident autocomplete machine.</p>
           <p>The fun part is not replacing the human bit. The fun part is seeing what new shapes appear when the human bit has a strange assistant nearby.</p>
         </section>
 
@@ -318,23 +445,147 @@
   (function(){
     var boot = document.getElementById('boot');
     var lines = boot ? Array.prototype.slice.call(boot.querySelectorAll('p')) : [];
+    var output = document.getElementById('terminalOutput');
+    var form = document.getElementById('terminalForm');
+    var input = document.getElementById('commandInput');
+    var statusText = document.getElementById('statusText');
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var fortunes = [
+      'the website you are avoiding making is already quietly making you.',
+      'today is an excellent day to rename one file and call it growth.',
+      'a tiny page can still be a portal if you give it a doorbell.',
+      'your next good idea is hiding inside a ridiculous first draft.',
+      'the machine says: drink water, ship weird, stay tender.'
+    ];
+    var vibes = [
+      'vibe scan: 72% terminal garden, 18% haunted stationery, 10% useful button.',
+      'vibe scan: handmade signal detected. corporate template not found.',
+      'vibe scan: small internet magic accumulating in the corners.',
+      'vibe scan: creative voltage stable. mystery levels pleasingly high.'
+    ];
+    var sectionCommands = {
+      about: 'Opening ABOUT. Jane appears to be building small, odd, useful-ish things again.',
+      web: 'Opening WEB. Warning: websites remain magic despite repeated attempts to make them normal.',
+      ai: 'Opening AI. Local model reports: collaboration is more fun than obedience.',
+      projects: 'Opening PROJECTS. Three small drawers found. Contents: experiments, drafts, internet things.',
+      contact: 'Opening CONTACT. Dramatic email button still humming quietly.'
+    };
+
+    function addLine(text, kind){
+      if (!output) return;
+      var line = document.createElement('p');
+      line.className = 'terminal-line' + (kind ? ' ' + kind : '');
+      line.textContent = text;
+      output.appendChild(line);
+      output.scrollTop = output.scrollHeight;
+    }
+
+    function addBlock(lines, kind){
+      lines.forEach(function(line){ addLine(line, kind); });
+    }
+
+    function jumpTo(id){
+      var target = document.getElementById(id);
+      if (!target) return;
+      target.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'start'});
+      window.setTimeout(function(){ target.focus({preventScroll:true}); }, reduce ? 0 : 280);
+    }
+
+    function randomFrom(items){
+      return items[Math.floor(Math.random() * items.length)];
+    }
+
+    function runCommand(raw){
+      var command = String(raw || '').trim().toLowerCase();
+      if (!command) return;
+      addLine('jane@home:~$ ' + command, 'command');
+
+      if (sectionCommands[command]) {
+        addLine(sectionCommands[command]);
+        jumpTo(command);
+        return;
+      }
+
+      if (command === 'help') {
+        addBlock([
+          'available commands:',
+          '  about, web, ai, projects, contact',
+          '  fortune, vibe, sudo, scan, readme, clear',
+          'pro tip: the fake terminal is real enough if you believe in buttons.'
+        ], 'system');
+        return;
+      }
+
+      if (command === 'fortune') {
+        addLine(randomFrom(fortunes), 'system');
+        return;
+      }
+
+      if (command === 'vibe') {
+        addLine(randomFrom(vibes), 'system');
+        if (statusText) statusText.textContent = 'status: vibe checked';
+        return;
+      }
+
+      if (command === 'sudo') {
+        addLine('permission denied: you are already powerful enough', 'error');
+        if (statusText) statusText.textContent = 'status: authority questioned';
+        return;
+      }
+
+      if (command === 'scan') {
+        addBlock([
+          'scanning homepage...',
+          'found: 5 glowing sections',
+          'found: 1 dramatic cursor',
+          'found: no portfolio template',
+          'risk level: charming'
+        ], 'system');
+        return;
+      }
+
+      if (command === 'readme') {
+        addBlock([
+          'README.TXT',
+          'This is a tiny homepage program.',
+          'It does not optimize your funnel.',
+          'It does make the web feel a little more handmade.'
+        ], 'system');
+        return;
+      }
+
+      if (command === 'clear') {
+        output.innerHTML = '';
+        addLine('screen cleared. mystery retained.', 'system');
+        return;
+      }
+
+      addLine('command not found: ' + command + '. try help.', 'error');
+    }
+
     if (reduce) {
       lines.forEach(function(line){ line.classList.add('show'); });
-      return;
+    } else {
+      lines.forEach(function(line, index){
+        window.setTimeout(function(){ line.classList.add('show'); }, 260 * index + 180);
+      });
     }
-    lines.forEach(function(line, index){
-      window.setTimeout(function(){ line.classList.add('show'); }, 260 * index + 180);
-    });
-    document.querySelectorAll('.commands a').forEach(function(link){
-      link.addEventListener('click', function(){
-        var id = link.getAttribute('href').slice(1);
-        var target = document.getElementById(id);
-        if (target) {
-          window.setTimeout(function(){ target.focus({preventScroll:true}); }, 250);
-        }
+
+    document.querySelectorAll('[data-command]').forEach(function(button){
+      button.addEventListener('click', function(){
+        runCommand(button.getAttribute('data-command'));
+        if (input) input.focus({preventScroll:true});
       });
     });
+
+    if (form) {
+      form.addEventListener('submit', function(event){
+        event.preventDefault();
+        runCommand(input.value);
+        input.value = '';
+        input.focus();
+      });
+    }
   }());
 </script>
 </body>
