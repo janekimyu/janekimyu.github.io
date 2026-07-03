@@ -227,6 +227,9 @@
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation:none !important;transition:none !important;scroll-behavior:auto !important}
   }
+  .footerline .coffee{ color:inherit; text-decoration:none; border-bottom:1px dotted var(--amber); padding-bottom:1px }
+  .footerline .coffee:hover{ color:var(--amber) }
+  .footerline .heart{ color:var(--amber) }
 </style>
 </head>
 <body>
@@ -280,7 +283,7 @@
 
       <div class="footerline">
         <span>no portfolio template detected</span>
-        <span>press any link to continue</span>
+        <span><a class="coffee" href="https://ko-fi.com/janekimyu" target="_blank" rel="noopener"><span class="heart">&#9825;</span> insert coin - a coffee, if it made you smile</a></span>
         <span><a href="index-v1.html">index v1</a></span>
       </div>
     </div>
